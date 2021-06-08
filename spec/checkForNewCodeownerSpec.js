@@ -21,6 +21,7 @@ const { createProbot } = require('probot');
 // The plugin refers to the actual app in index.js.
 const oppiaBot = require('../index');
 const checkPullRequestJobModule = require('../lib/checkPullRequestJob');
+const checkCronJobModule = require('../lib/checkNewCronJobs');
 const checkCriticalPullRequestModule =
   require('../lib/checkCriticalPullRequest');
 const newCodeOwnerModule = require('../lib/checkForNewCodeowner');
@@ -200,6 +201,7 @@ describe('check for new code owner', () => {
     app = robot.load(oppiaBot);
     spyOn(app, 'auth').and.resolveTo(github);
     spyOn(checkPullRequestJobModule, 'checkForNewJob').and.callFake(() => { });
+    spyOn(checkCronJobModule, 'checkForNewCronJob').and.callFake(() => { });
     spyOn(
       checkCriticalPullRequestModule,
       'checkIfPRAffectsDatastoreLayer'
@@ -253,7 +255,7 @@ describe('check for new code owner', () => {
           owner: payloadData.payload.repository.owner.login,
           issue_number: payloadData.payload.pull_request.number,
           body:
-            'Hi @kevintab95, this PR adds a new code owner, @testuser to ' +
+            'Hi @DubeySandeep, this PR adds a new code owner, @testuser to ' +
             '/core/templates/pages/signup-page/. Please make sure the changes' +
             ' are verified by the previous codeowner(s) of the file. Thanks!'
         });
@@ -292,7 +294,7 @@ describe('check for new code owner', () => {
           owner: payloadData.payload.repository.owner.login,
           issue_number: payloadData.payload.pull_request.number,
           body:
-            'Hi @reviewer, this PR adds a new code owner, @testuser to ' +
+            'Hi @DubeySandeep, this PR adds a new code owner, @testuser to ' +
             '/core/templates/pages/signup-page/. Please make sure the changes' +
             ' are verified by the previous codeowner(s) of the file. Thanks!'
         });
@@ -342,7 +344,7 @@ describe('check for new code owner', () => {
         owner: payloadData.payload.repository.owner.login,
         issue_number: payloadData.payload.pull_request.number,
         body:
-          'Hi @kevintab95, this PR adds the following new code owners ' +
+          'Hi @DubeySandeep, this PR adds the following new code owners ' +
           '@testuser, @testuser2 to the following files ' +
           '/core/templates/pages/signup-page/, ' +
           '/core/templates/pages/signdown-page/' +

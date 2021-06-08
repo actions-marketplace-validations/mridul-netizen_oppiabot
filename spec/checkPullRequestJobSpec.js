@@ -27,6 +27,8 @@ const checkPullRequestTemplateModule =
   require('../lib/checkPullRequestTemplate');
 const newCodeOwnerModule = require('../lib/checkForNewCodeowner');
 const scheduler = require('../lib/scheduler');
+const checkCronJobModule = require('../lib/checkNewCronJobs');
+const { JOBS_AND_FETURES_TESTING_WIKI_LINK } = require('../lib/utils');
 
 let payloadData = JSON.parse(
   JSON.stringify(require('../fixtures/pullRequestPayload.json'))
@@ -459,6 +461,7 @@ describe('Pull Request Job Spec', () => {
       checkCriticalPullRequestModule, 'checkIfPRAffectsDatastoreLayer'
     ).and.callFake(() => { });
     spyOn(checkPullRequestBranchModule, 'checkBranch').and.callFake(() => { });
+    spyOn(checkCronJobModule, 'checkForNewCronJob').and.callFake(() => { });
     spyOn(checkWIPModule, 'checkWIP').and.callFake(() => { });
     spyOn(
       checkPullRequestTemplateModule, 'checkTemplate'
@@ -495,11 +498,8 @@ describe('Pull Request Job Spec', () => {
           'https://goo.gl/forms/XIj00RJ2h5L55XzU2')
       );
       const newLineFeed = '<br>';
-      const wikiLinkText = (
-        'this guide'.link(
-          'https://github.com/oppia/oppia/wiki/Running-jobs-in-production' +
-          '#submitting-a-pr-with-a-new-job')
-      );
+      const wikiLinkText = 'this guide'.link(
+        JOBS_AND_FETURES_TESTING_WIKI_LINK);
       const jobRegistryLink = (
         'job registry'.link(
           'https://github.com/oppia/oppia/blob/develop/core/jobs_registry.py')
@@ -511,7 +511,7 @@ describe('Pull Request Job Spec', () => {
       expect(github.issues.createComment).toHaveBeenCalledWith({
         issue_number: payloadData.payload.pull_request.number,
         body:
-          'Hi @seanlip, @vojtechjelinek, PTAL at this PR, ' +
+          'Hi @vojtechjelinek, PTAL at this PR, ' +
           'it adds a new one off job. The name of the job is ' +
           jobNameLink + '.' + newLineFeed + 'Also @' + author +
           ', please add the new job ' + 'to the ' + jobRegistryLink +
@@ -531,7 +531,7 @@ describe('Pull Request Job Spec', () => {
         issue_number: payloadData.payload.pull_request.number,
         repo: payloadData.payload.repository.name,
         owner: payloadData.payload.repository.owner.login,
-        assignees: ['seanlip', 'vojtechjelinek']
+        assignees: ['vojtechjelinek']
       });
     });
 
@@ -577,11 +577,8 @@ describe('Pull Request Job Spec', () => {
         'server jobs form'.link('https://goo.gl/forms/XIj00RJ2h5L55XzU2')
       );
       const newLineFeed = '<br>';
-      const wikiLinkText = (
-        'this guide'.link(
-          'https://github.com/oppia/oppia/wiki/Running-jobs-in-production' +
-          '#submitting-a-pr-with-a-new-job')
-      );
+      const wikiLinkText = 'this guide'.link(
+        JOBS_AND_FETURES_TESTING_WIKI_LINK);
       const jobRegistryLink = (
         'job registry'.link(
           'https://github.com/oppia/oppia/blob/develop/core/jobs_registry.py')
@@ -595,7 +592,7 @@ describe('Pull Request Job Spec', () => {
       expect(github.issues.createComment).toHaveBeenCalledWith({
         issue_number: payloadData.payload.pull_request.number,
         body:
-          'Hi @seanlip, @vojtechjelinek, PTAL at this PR, ' +
+          'Hi @vojtechjelinek, PTAL at this PR, ' +
           'it adds new one off jobs. The jobs are ' + firstJobNameLink +
           ', ' + secondJobNameLink + '.' + newLineFeed + 'Also @' +
           author + ', please add the new jobs ' + 'to the ' +
@@ -615,7 +612,7 @@ describe('Pull Request Job Spec', () => {
         issue_number: payloadData.payload.pull_request.number,
         repo: payloadData.payload.repository.name,
         owner: payloadData.payload.repository.owner.login,
-        assignees: ['seanlip', 'vojtechjelinek']
+        assignees: ['vojtechjelinek']
       });
     });
 
@@ -662,18 +659,15 @@ describe('Pull Request Job Spec', () => {
         'server jobs form'.link('https://goo.gl/forms/XIj00RJ2h5L55XzU2')
       );
       const newLineFeed = '<br>';
-      const wikiLinkText = (
-        'this guide'.link(
-          'https://github.com/oppia/oppia/wiki/Running-jobs-in-production' +
-            '#submitting-a-pr-with-a-new-job')
-      );
+      const wikiLinkText = 'this guide'.link(
+        JOBS_AND_FETURES_TESTING_WIKI_LINK);
       const jobNameLink = (
         'FirstTestOneOffJob'.link(firstNewJobFileObj.blob_url)
       );
       expect(github.issues.createComment).toHaveBeenCalledWith({
         issue_number: payloadData.payload.pull_request.number,
         body:
-            'Hi @seanlip, @vojtechjelinek, PTAL at this PR, ' +
+            'Hi @vojtechjelinek, PTAL at this PR, ' +
             'it adds a new one off job. The name of the job is ' +
             jobNameLink + '.' + newLineFeed + 'Also @' + author +
             ', please make sure to fill in the ' + formText +
@@ -692,7 +686,7 @@ describe('Pull Request Job Spec', () => {
         issue_number: payloadData.payload.pull_request.number,
         repo: payloadData.payload.repository.name,
         owner: payloadData.payload.repository.owner.login,
-        assignees: ['seanlip', 'vojtechjelinek']
+        assignees: ['vojtechjelinek']
       });
     });
 
@@ -737,11 +731,8 @@ describe('Pull Request Job Spec', () => {
         'server jobs form'.link('https://goo.gl/forms/XIj00RJ2h5L55XzU2')
       );
       const newLineFeed = '<br>';
-      const wikiLinkText = (
-        'this guide'.link(
-          'https://github.com/oppia/oppia/wiki/Running-jobs-in-production' +
-          '#submitting-a-pr-with-a-new-job')
-      );
+      const wikiLinkText = 'this guide'.link(
+        JOBS_AND_FETURES_TESTING_WIKI_LINK);
       const jobRegistryLink = (
         'job registry'.link(
           'https://github.com/oppia/oppia/blob/develop/core/jobs_registry.py')
@@ -753,7 +744,7 @@ describe('Pull Request Job Spec', () => {
       expect(github.issues.createComment).toHaveBeenCalledWith({
         issue_number: payloadData.payload.pull_request.number,
         body:
-          'Hi @seanlip, @vojtechjelinek, PTAL at this PR, ' +
+          'Hi @vojtechjelinek, PTAL at this PR, ' +
           'it adds a new one off job. The name of the job is ' + jobNameLink +
           '.' + newLineFeed + 'Also @' + author + ', please add the new job ' +
           'to the ' + jobRegistryLink + ' and please make sure to fill ' +
@@ -772,7 +763,7 @@ describe('Pull Request Job Spec', () => {
         issue_number: payloadData.payload.pull_request.number,
         repo: payloadData.payload.repository.name,
         owner: payloadData.payload.repository.owner.login,
-        assignees: ['seanlip', 'vojtechjelinek']
+        assignees: ['vojtechjelinek']
       });
     });
 
